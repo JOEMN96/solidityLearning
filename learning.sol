@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.7;
 
+
 contract pratice  {
     
      
@@ -27,6 +28,13 @@ contract pratice  {
         uint item = 100;
         return item;
     }
+    
+    
+    
+    
+    function test() public pure returns(string memory) {
+        return "Hello world";
+    }
 
     // DataTypes
 
@@ -47,11 +55,35 @@ contract pratice  {
         uint age;
     }
     
-    person Joe = person("Joe","adddzx",0x829BD824B016326A401d083B33D092293333A830,25);
+    struct person2 {
+        int balance;
+        uint age;
+        string name;
+       
+    }
+    person2 joeMn = person2 (-1,21,"Jpe");
+    
+    person  Joe = person("Joe","adddzx",0x829BD824B016326A401d083B33D092293333A830,25);
+    
+    //  Arrays
+    
+    string[] public myarr = ["Joe","mon"];
+    uint[]  myarr2d = [1,2,3];
+    string[]  arr3;
+    uint[][] public arr2D = [[1,2,3],[1,1,2]];
+    
+    function addValtoArr(string memory _str) public {
+        arr3.push(_str);
+    }
+    
+    function viewMyArr() public view returns (uint) {
+        return arr3.length;
+    }
+    
+    // mapping
+    // mapping(key => value) Name;
+    
+    mapping(int => string) public firstMap;
+    
 }
 
-
-
-    
-    
-    

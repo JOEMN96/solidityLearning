@@ -85,7 +85,7 @@ contract pratice  {
     
     mapping(int => string) public firstMap;
 
-        mapping(int => string) public names;
+    mapping(int => string) public names;
     address public owner;
     // constructor () {
     //     names[0] = "Joe";
@@ -142,3 +142,42 @@ contract pratice  {
     
 }
 
+contract HotelApp {
+    
+    //  State Variables
+    address  public  Owner;
+    //  Payable Means A fn can pay this address with non-zero Ether value
+    
+    enum Status {VACANT,OCCUPIED}
+    //  Enums
+    
+    Status currentStatus;
+    //  declaring a Enum variable
+    
+    event currentOccupent (address _user, uint _amount);
+    
+    //  Events are like Js events but in solididity we are one creates the events.
+    
+
+    
+    constructor()  {
+        Owner = msg.sender;
+        currentStatus = Status.VACANT;
+    }
+    
+    //  Modifieres are like Middlewares In node js
+    
+    modifier isValidTransact (uint _amount) {
+        require(currentStatus == Status.VACANT, "Currently Room is Occupied");
+        require(msg.value >= _amount, "Not Enough Ether Provied");
+        _;
+    }
+    
+    receive() external  payable isValidTransact(2 ether) {
+        //  Require are like coditions --> They need to pass
+        payable(Owner).transfer(msg.value);
+        currentStatus = Status.OCCUPIED;
+        emit currentOccupent(msg.sender, msg.value);
+    }
+    
+}

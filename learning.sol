@@ -146,6 +146,7 @@ contract HotelApp {
     
     //  State Variables
     address  public  Owner;
+    // address payable  public  Owner;
     //  Payable Means A fn can pay this address with non-zero Ether value
     
     enum Status {VACANT,OCCUPIED}
@@ -168,16 +169,65 @@ contract HotelApp {
     //  Modifieres are like Middlewares In node js
     
     modifier isValidTransact (uint _amount) {
+        //  Require are like coditions --> They need to pass
         require(currentStatus == Status.VACANT, "Currently Room is Occupied");
         require(msg.value >= _amount, "Not Enough Ether Provied");
         _;
     }
     
     receive() external  payable isValidTransact(2 ether) {
-        //  Require are like coditions --> They need to pass
         payable(Owner).transfer(msg.value);
         currentStatus = Status.OCCUPIED;
         emit currentOccupent(msg.sender, msg.value);
+    }
+    
+}
+
+
+contract Owner {
+    
+    address public owner;
+    
+    constructor () {
+        owner = msg.sender;
+    }
+    
+   modifier onlyOwner() {
+        require (owner == msg.sender, "Error owner is must be sender");
+        _;
+    }
+    
+}
+
+contract vault  {
+    string secrets;
+    
+    constructor (string memory _secret) {
+        secrets = _secret;
+    }
+    
+     
+     function getSecret() view  public returns(string memory) {
+        return secrets;
+    }
+    
+}
+
+contract secret is Owner {
+    
+    address valutAddress;
+    
+    constructor (string memory _secret )  {
+        vault _vaultAdd = new vault(_secret);
+        valutAddress = address(_vaultAdd);
+        super;
+    }
+    
+     function getSecret() view  public returns(string memory) {
+        
+        vault _SecValut = vault(valutAddress);
+        
+        return _SecValut.getSecret();
     }
     
 }

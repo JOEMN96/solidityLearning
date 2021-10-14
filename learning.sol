@@ -223,6 +223,7 @@ contract secret is Owner {
         super;
     }
     
+    
      function getSecret() view  public returns(string memory) {
         
         vault _SecValut = vault(valutAddress);
